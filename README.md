@@ -105,3 +105,6 @@ Beyond fraud scoring itself, the three-page executive dashboard extends the anal
 Dashboard link: https://dbc-a6b481b0-6de2.cloud.databricks.com/dashboardsv3/01f1b8a96b5f1cb79de89d2f36bf0383/published?o=7474647451048864
 
 <img width="819" height="548" alt="Image" src="https://github.com/user-attachments/assets/f94c5b2c-7bdb-441b-8d42-efb6bf2a1367" />
+
+<img width="838" height="588" alt="Image" src="https://github.com/user-attachments/assets/df9a8796-cdcd-4260-bb7c-c99301104eb3" />
+
