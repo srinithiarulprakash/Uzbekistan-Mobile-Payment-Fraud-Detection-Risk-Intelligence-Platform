@@ -1,0 +1,2113 @@
+{
+  "datasets": [
+    {
+      "name": "564d8f64",
+      "displayName": "Processed Transactions Data Overview",
+      "queryLines": [
+        "SELECT * FROM enriched_transactions;"
+      ]
+    },
+    {
+      "name": "txn_behavior",
+      "displayName": "Transaction Behavioral Analytics",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.default.raw_transactions",
+        "dimensions": [
+          {
+            "name": "tx_date",
+            "expr": "DATE(timestamp)",
+            "displayName": "Transaction Date"
+          },
+          {
+            "name": "channel",
+            "expr": "channel",
+            "displayName": "Channel"
+          },
+          {
+            "name": "hour_of_day",
+            "expr": "hour_of_day",
+            "displayName": "Hour of Day"
+          },
+          {
+            "name": "day_name",
+            "expr": "CASE\n  WHEN day_of_week = 0 THEN 'Sun'\n  WHEN day_of_week = 1 THEN 'Mon'\n  WHEN day_of_week = 2 THEN 'Tue'\n  WHEN day_of_week = 3 THEN 'Wed'\n  WHEN day_of_week = 4 THEN 'Thu'\n  WHEN day_of_week = 5 THEN 'Fri'\n  WHEN day_of_week = 6 THEN 'Sat'\nEND",
+            "displayName": "Day of Week"
+          },
+          {
+            "name": "weekend_flag",
+            "expr": "CASE WHEN is_weekend = 1 THEN 'Weekend' ELSE 'Weekday' END",
+            "displayName": "Weekend/Weekday"
+          },
+          {
+            "name": "cross_city_flag",
+            "expr": "CASE WHEN is_cross_city_tx = 1 THEN 'Cross-City' ELSE 'Same City' END",
+            "displayName": "Cross-City Transaction"
+          },
+          {
+            "name": "login_attempts",
+            "expr": "login_attempts",
+            "displayName": "Login Attempts"
+          },
+          {
+            "name": "fraud_status",
+            "expr": "CASE WHEN is_fraud = 1 THEN 'Fraud' ELSE 'Legitimate' END",
+            "displayName": "Fraud Status"
+          }
+        ],
+        "measures": [
+          {
+            "name": "total_amount_uzs",
+            "expr": "SUM(amount_uzs)",
+            "displayName": "Total Amount (UZS)",
+            "format": {
+              "type": "currency",
+              "currencyCode": "UZS",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 0.0
+              },
+              "abbreviation": "compact"
+            }
+          },
+          {
+            "name": "fraud_count",
+            "expr": "SUM(is_fraud)",
+            "displayName": "Fraud Count"
+          },
+          {
+            "name": "tx_count",
+            "expr": "COUNT(tx_id)",
+            "displayName": "Transaction Count"
+          },
+          {
+            "name": "avg_amount_uzs",
+            "expr": "AVG(amount_uzs)",
+            "displayName": "Avg Amount (UZS)",
+            "format": {
+              "type": "currency",
+              "currencyCode": "UZS",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 0.0
+              }
+            }
+          },
+          {
+            "name": "avg_session_duration",
+            "expr": "AVG(session_duration_sec)",
+            "displayName": "Avg Session Duration (sec)",
+            "format": {
+              "type": "number",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 0.0
+              }
+            }
+          },
+          {
+            "name": "fraud_rate",
+            "expr": "SUM(is_fraud) * 1.0 / COUNT(tx_id)",
+            "displayName": "Fraud Rate",
+            "format": {
+              "type": "percentage",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 2.0
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "enriched_tx",
+      "displayName": "Enriched Transactions (Fraud & Risk)",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.default.enriched_transactions",
+        "dimensions": [
+          {
+            "name": "tx_date",
+            "expr": "DATE(timestamp)",
+            "displayName": "Transaction Date"
+          },
+          {
+            "name": "channel",
+            "expr": "channel",
+            "displayName": "Channel"
+          },
+          {
+            "name": "risk_tier",
+            "expr": "Risk_Tier",
+            "displayName": "Risk Tier"
+          },
+          {
+            "name": "user_region",
+            "expr": "User_Region",
+            "displayName": "User Region"
+          },
+          {
+            "name": "merchant_category",
+            "expr": "MerchantCategory",
+            "displayName": "Merchant Category"
+          },
+          {
+            "name": "fraud_status",
+            "expr": "CASE WHEN is_fraud = 1 THEN 'Fraud' ELSE 'Legitimate' END",
+            "displayName": "Fraud Status"
+          }
+        ],
+        "measures": [
+          {
+            "name": "total_amount_uzs",
+            "expr": "SUM(amount_uzs)",
+            "displayName": "Total Amount (UZS)",
+            "format": {
+              "type": "currency",
+              "currencyCode": "UZS",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 0.0
+              },
+              "abbreviation": "compact"
+            }
+          },
+          {
+            "name": "fraud_count",
+            "expr": "SUM(is_fraud)",
+            "displayName": "Fraud Count"
+          },
+          {
+            "name": "tx_count",
+            "expr": "COUNT(tx_id)",
+            "displayName": "Transaction Count"
+          },
+          {
+            "name": "avg_amount_uzs",
+            "expr": "AVG(amount_uzs)",
+            "displayName": "Avg Amount (UZS)",
+            "format": {
+              "type": "currency",
+              "currencyCode": "UZS",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 0.0
+              }
+            }
+          },
+          {
+            "name": "avg_z_score",
+            "expr": "AVG(Amount_Z_Score)",
+            "displayName": "Avg Z-Score",
+            "format": {
+              "type": "number",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 2.0
+              }
+            }
+          },
+          {
+            "name": "fraud_rate",
+            "expr": "SUM(is_fraud) * 1.0 / COUNT(tx_id)",
+            "displayName": "Fraud Rate",
+            "format": {
+              "type": "percentage",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 2.0
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "merchants",
+      "displayName": "Merchant Risk Profiles",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.default.raw_merchants",
+        "dimensions": [
+          {
+            "name": "merchant_id",
+            "expr": "merchant_id",
+            "displayName": "Merchant ID"
+          },
+          {
+            "name": "merchant_name",
+            "expr": "merchant_name",
+            "displayName": "Merchant Name"
+          },
+          {
+            "name": "category",
+            "expr": "category",
+            "displayName": "Category"
+          },
+          {
+            "name": "city",
+            "expr": "city",
+            "displayName": "City"
+          },
+          {
+            "name": "region",
+            "expr": "region",
+            "displayName": "Region"
+          },
+          {
+            "name": "online_status",
+            "expr": "CASE WHEN is_online = 1 THEN 'Online' ELSE 'Offline' END",
+            "displayName": "Online Status"
+          }
+        ],
+        "measures": [
+          {
+            "name": "avg_risk_score",
+            "expr": "AVG(risk_score)",
+            "displayName": "Avg Risk Score",
+            "format": {
+              "type": "number",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 2.0
+              }
+            }
+          },
+          {
+            "name": "avg_transaction_uzs",
+            "expr": "AVG(avg_transaction_uzs)",
+            "displayName": "Avg Transaction (UZS)",
+            "format": {
+              "type": "currency",
+              "currencyCode": "UZS",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 0.0
+              },
+              "abbreviation": "compact"
+            }
+          },
+          {
+            "name": "merchant_count",
+            "expr": "COUNT(merchant_id)",
+            "displayName": "Merchant Count"
+          },
+          {
+            "name": "max_risk_score",
+            "expr": "MAX(risk_score)",
+            "displayName": "Max Risk Score",
+            "format": {
+              "type": "number",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 2.0
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "users",
+      "displayName": "User Demographics & Credit",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.default.raw_users",
+        "dimensions": [
+          {
+            "name": "user_id",
+            "expr": "user_id",
+            "displayName": "User ID"
+          },
+          {
+            "name": "gender",
+            "expr": "gender",
+            "displayName": "Gender"
+          },
+          {
+            "name": "age",
+            "expr": "age",
+            "displayName": "Age"
+          },
+          {
+            "name": "age_group",
+            "expr": "CASE\n  WHEN age < 25 THEN '18-24'\n  WHEN age < 35 THEN '25-34'\n  WHEN age < 45 THEN '35-44'\n  WHEN age < 55 THEN '45-54'\n  ELSE '55+'\nEND",
+            "displayName": "Age Group"
+          },
+          {
+            "name": "city",
+            "expr": "city",
+            "displayName": "City"
+          },
+          {
+            "name": "region",
+            "expr": "region",
+            "displayName": "Region"
+          },
+          {
+            "name": "primary_app",
+            "expr": "primary_app",
+            "displayName": "Primary App"
+          },
+          {
+            "name": "preferred_device",
+            "expr": "preferred_device",
+            "displayName": "Preferred Device"
+          },
+          {
+            "name": "identity_status",
+            "expr": "CASE WHEN identity_verified = 1 THEN 'Verified' ELSE 'Unverified' END",
+            "displayName": "Identity Status"
+          }
+        ],
+        "measures": [
+          {
+            "name": "user_count",
+            "expr": "COUNT(user_id)",
+            "displayName": "User Count"
+          },
+          {
+            "name": "avg_credit_score",
+            "expr": "AVG(credit_score)",
+            "displayName": "Avg Credit Score",
+            "format": {
+              "type": "number",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 0.0
+              }
+            }
+          },
+          {
+            "name": "avg_monthly_income_uzs",
+            "expr": "AVG(monthly_income_uzs)",
+            "displayName": "Avg Monthly Income (UZS)",
+            "format": {
+              "type": "currency",
+              "currencyCode": "UZS",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 0.0
+              },
+              "abbreviation": "compact"
+            }
+          },
+          {
+            "name": "identity_verified_rate",
+            "expr": "SUM(identity_verified) * 1.0 / COUNT(user_id)",
+            "displayName": "Identity Verified Rate",
+            "format": {
+              "type": "percentage",
+              "decimalPlaces": {
+                "type": "exact",
+                "places": 2.0
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "name": "7c38d083",
+      "displayName": "Fraud & Risk Overview",
+      "layout": [
+        {
+          "widget": {
+            "name": "kpi_total_tx",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "enriched_tx",
+                  "fields": [
+                    {
+                      "name": "measure(tx_count)",
+                      "expression": "MEASURE(`tx_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Total Transactions"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(tx_count)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_fraud_detected",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "enriched_tx",
+                  "fields": [
+                    {
+                      "name": "measure(fraud_count)",
+                      "expression": "MEASURE(`fraud_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fraud Detected"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(fraud_count)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_fraud_rate",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "enriched_tx",
+                  "fields": [
+                    {
+                      "name": "measure(fraud_rate)",
+                      "expression": "MEASURE(`fraud_rate`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fraud Rate"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(fraud_rate)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_total_volume",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "enriched_tx",
+                  "fields": [
+                    {
+                      "name": "measure(total_amount_uzs)",
+                      "expression": "MEASURE(`total_amount_uzs`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Total Volume (UZS)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(total_amount_uzs)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "fraud_by_channel",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "enriched_tx",
+                  "fields": [
+                    {
+                      "name": "channel",
+                      "expression": "`channel`"
+                    },
+                    {
+                      "name": "measure(fraud_count)",
+                      "expression": "MEASURE(`fraud_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fraud by Channel"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "channel",
+                  "displayName": "channel",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(fraud_count)",
+                  "displayName": "fraud_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "channel",
+                  "displayName": "channel",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "risk_tier_dist",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "enriched_tx",
+                  "fields": [
+                    {
+                      "name": "measure(tx_count)",
+                      "expression": "MEASURE(`tx_count`)"
+                    },
+                    {
+                      "name": "risk_tier",
+                      "expression": "`risk_tier`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Risk Tier Distribution"
+              },
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "measure(tx_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "tx_count"
+                },
+                "color": {
+                  "fieldName": "risk_tier",
+                  "displayName": "risk_tier",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "fraud_by_region",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "enriched_tx",
+                  "fields": [
+                    {
+                      "name": "user_region",
+                      "expression": "`user_region`"
+                    },
+                    {
+                      "name": "measure(fraud_count)",
+                      "expression": "MEASURE(`fraud_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fraud by Region"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "user_region",
+                  "displayName": "user_region",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(fraud_count)",
+                  "displayName": "fraud_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "user_region",
+                  "displayName": "user_region",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 2,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "tx_volume_over_time",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "enriched_tx",
+                  "fields": [
+                    {
+                      "name": "monthly(tx_date)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `tx_date`)"
+                    },
+                    {
+                      "name": "measure(tx_count)",
+                      "expression": "MEASURE(`tx_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Transaction Volume Over Time"
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(tx_date)",
+                  "displayName": "Month",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(tx_count)",
+                  "displayName": "tx_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "fraud_by_merchant_cat",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "enriched_tx",
+                  "fields": [
+                    {
+                      "name": "merchant_category",
+                      "expression": "`merchant_category`"
+                    },
+                    {
+                      "name": "measure(fraud_count)",
+                      "expression": "MEASURE(`fraud_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fraud by Merchant Category"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "merchant_category",
+                  "displayName": "merchant_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(fraud_count)",
+                  "displayName": "fraud_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "merchant_category",
+                  "displayName": "merchant_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 7,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "zscore_by_channel",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "enriched_tx",
+                  "fields": [
+                    {
+                      "name": "channel",
+                      "expression": "`channel`"
+                    },
+                    {
+                      "name": "measure(avg_z_score)",
+                      "expression": "MEASURE(`avg_z_score`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Z-Score by Channel"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "channel",
+                  "displayName": "channel",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(avg_z_score)",
+                  "displayName": "avg_z_score",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "channel",
+                  "displayName": "channel",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_amount_by_risk",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "enriched_tx",
+                  "fields": [
+                    {
+                      "name": "risk_tier",
+                      "expression": "`risk_tier`"
+                    },
+                    {
+                      "name": "measure(avg_amount_uzs)",
+                      "expression": "MEASURE(`avg_amount_uzs`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Amount by Risk Tier"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "risk_tier",
+                  "displayName": "risk_tier",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(avg_amount_uzs)",
+                  "displayName": "avg_amount_uzs",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "risk_tier",
+                  "displayName": "risk_tier",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 12,
+            "width": 6,
+            "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "merchant_risk",
+      "displayName": "Merchant Risk Profiling",
+      "layout": [
+        {
+          "widget": {
+            "name": "kpi_merchant_count",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "merchants",
+                  "fields": [
+                    {
+                      "name": "measure(merchant_count)",
+                      "expression": "MEASURE(`merchant_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Total Merchants"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(merchant_count)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_avg_risk",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "merchants",
+                  "fields": [
+                    {
+                      "name": "measure(avg_risk_score)",
+                      "expression": "MEASURE(`avg_risk_score`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Risk Score"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(avg_risk_score)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_avg_tx",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "merchants",
+                  "fields": [
+                    {
+                      "name": "measure(avg_transaction_uzs)",
+                      "expression": "MEASURE(`avg_transaction_uzs`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Transaction (UZS)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(avg_transaction_uzs)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "merchant_by_category",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "merchants",
+                  "fields": [
+                    {
+                      "name": "category",
+                      "expression": "`category`"
+                    },
+                    {
+                      "name": "measure(merchant_count)",
+                      "expression": "MEASURE(`merchant_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Merchant Count by Category"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "category",
+                  "displayName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(merchant_count)",
+                  "displayName": "merchant_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "category",
+                  "displayName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "online_offline",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "merchants",
+                  "fields": [
+                    {
+                      "name": "measure(merchant_count)",
+                      "expression": "MEASURE(`merchant_count`)"
+                    },
+                    {
+                      "name": "online_status",
+                      "expression": "`online_status`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Online vs Offline"
+              },
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "measure(merchant_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "merchant_count"
+                },
+                "color": {
+                  "fieldName": "online_status",
+                  "displayName": "online_status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "risk_by_region",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "merchants",
+                  "fields": [
+                    {
+                      "name": "region",
+                      "expression": "`region`"
+                    },
+                    {
+                      "name": "measure(avg_risk_score)",
+                      "expression": "MEASURE(`avg_risk_score`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Risk Score by Region"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "region",
+                  "displayName": "region",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(avg_risk_score)",
+                  "displayName": "avg_risk_score",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "region",
+                  "displayName": "region",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "top_merchants_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "merchants",
+                  "fields": [
+                    {
+                      "name": "merchant_name",
+                      "expression": "`merchant_name`"
+                    },
+                    {
+                      "name": "category",
+                      "expression": "`category`"
+                    },
+                    {
+                      "name": "region",
+                      "expression": "`region`"
+                    },
+                    {
+                      "name": "measure(avg_risk_score)",
+                      "expression": "MEASURE(`avg_risk_score`)"
+                    },
+                    {
+                      "name": "measure(avg_transaction_uzs)",
+                      "expression": "MEASURE(`avg_transaction_uzs`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Top Merchants by Risk Score"
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "merchant_name"
+                  },
+                  {
+                    "fieldName": "category"
+                  },
+                  {
+                    "fieldName": "region"
+                  },
+                  {
+                    "fieldName": "measure(avg_risk_score)"
+                  },
+                  {
+                    "fieldName": "measure(avg_transaction_uzs)"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 7,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "risk_by_category",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "merchants",
+                  "fields": [
+                    {
+                      "name": "category",
+                      "expression": "`category`"
+                    },
+                    {
+                      "name": "measure(avg_risk_score)",
+                      "expression": "MEASURE(`avg_risk_score`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Risk Score by Category"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "category",
+                  "displayName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(avg_risk_score)",
+                  "displayName": "avg_risk_score",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "category",
+                  "displayName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 12,
+            "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "user_behavioral",
+      "displayName": "User & Behavioral Analytics",
+      "layout": [
+        {
+          "widget": {
+            "name": "kpi_user_count",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "users",
+                  "fields": [
+                    {
+                      "name": "measure(user_count)",
+                      "expression": "MEASURE(`user_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Total Users"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(user_count)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_credit_score",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "users",
+                  "fields": [
+                    {
+                      "name": "measure(avg_credit_score)",
+                      "expression": "MEASURE(`avg_credit_score`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Credit Score"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(avg_credit_score)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_id_verified",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "users",
+                  "fields": [
+                    {
+                      "name": "measure(identity_verified_rate)",
+                      "expression": "MEASURE(`identity_verified_rate`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Identity Verified Rate"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(identity_verified_rate)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_avg_income",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "users",
+                  "fields": [
+                    {
+                      "name": "measure(avg_monthly_income_uzs)",
+                      "expression": "MEASURE(`avg_monthly_income_uzs`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Monthly Income (UZS)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(avg_monthly_income_uzs)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "users_by_region",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "users",
+                  "fields": [
+                    {
+                      "name": "region",
+                      "expression": "`region`"
+                    },
+                    {
+                      "name": "measure(user_count)",
+                      "expression": "MEASURE(`user_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Users by Region"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "region",
+                  "displayName": "region",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(user_count)",
+                  "displayName": "user_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "region",
+                  "displayName": "region",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "users_by_age",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "users",
+                  "fields": [
+                    {
+                      "name": "age_group",
+                      "expression": "`age_group`"
+                    },
+                    {
+                      "name": "measure(user_count)",
+                      "expression": "MEASURE(`user_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Users by Age Group"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "age_group",
+                  "displayName": "age_group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(user_count)",
+                  "displayName": "user_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "age_group",
+                  "displayName": "age_group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "identity_status",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "users",
+                  "fields": [
+                    {
+                      "name": "measure(user_count)",
+                      "expression": "MEASURE(`user_count`)"
+                    },
+                    {
+                      "name": "identity_status",
+                      "expression": "`identity_status`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Identity Status Distribution"
+              },
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "measure(user_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "user_count"
+                },
+                "color": {
+                  "fieldName": "identity_status",
+                  "displayName": "identity_status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 2,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "fraud_by_hour",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "txn_behavior",
+                  "fields": [
+                    {
+                      "name": "hour_of_day",
+                      "expression": "`hour_of_day`"
+                    },
+                    {
+                      "name": "measure(fraud_count)",
+                      "expression": "MEASURE(`fraud_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fraud by Hour of Day"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "hour_of_day",
+                  "displayName": "hour_of_day",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(fraud_count)",
+                  "displayName": "fraud_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "hour_of_day",
+                  "displayName": "hour_of_day",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "fraud_by_day",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "txn_behavior",
+                  "fields": [
+                    {
+                      "name": "day_name",
+                      "expression": "`day_name`"
+                    },
+                    {
+                      "name": "measure(fraud_count)",
+                      "expression": "MEASURE(`fraud_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fraud by Day of Week"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "day_name",
+                  "displayName": "day_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(fraud_count)",
+                  "displayName": "fraud_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "day_name",
+                  "displayName": "day_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 7,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "fraud_by_login",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "txn_behavior",
+                  "fields": [
+                    {
+                      "name": "login_attempts",
+                      "expression": "`login_attempts`"
+                    },
+                    {
+                      "name": "measure(fraud_count)",
+                      "expression": "MEASURE(`fraud_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fraud by Login Attempts"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "login_attempts",
+                  "displayName": "login_attempts",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(fraud_count)",
+                  "displayName": "fraud_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "login_attempts",
+                  "displayName": "login_attempts",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "fraud_weekend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "txn_behavior",
+                  "fields": [
+                    {
+                      "name": "weekend_flag",
+                      "expression": "`weekend_flag`"
+                    },
+                    {
+                      "name": "measure(fraud_count)",
+                      "expression": "MEASURE(`fraud_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fraud: Weekend vs Weekday"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "weekend_flag",
+                  "displayName": "weekend_flag",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(fraud_count)",
+                  "displayName": "fraud_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "weekend_flag",
+                  "displayName": "weekend_flag",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 12,
+            "width": 6,
+            "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
