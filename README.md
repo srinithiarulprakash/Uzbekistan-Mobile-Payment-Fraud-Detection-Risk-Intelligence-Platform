@@ -87,10 +87,10 @@ Business Value
 3. Personalized, adaptive detection — because the baseline is per-user, the system scales fraud sensitivity to individual behavior instead of a fixed platform-wide rule.
 
 Tech Highlights:
-1.Delta Lake + Unity Catalog Volumes for governed, versioned lakehouse storage
-2.Advanced SQL: CTEs and window-style aggregation for per-user statistical modeling
-3.Parametric statistics (Z-score anomaly detection) instead of static rule-based thresholds
-4.Multi-tab executive BI dashboarding for stakeholder-ready insights
+1. Delta Lake + Unity Catalog Volumes for governed, versioned lakehouse storage
+2. Advanced SQL: CTEs and window-style aggregation for per-user statistical modeling
+3. Parametric statistics (Z-score anomaly detection) instead of static rule-based thresholds
+4. Multi-tab executive BI dashboarding for stakeholder-ready insights
 
 Conclusion
 
