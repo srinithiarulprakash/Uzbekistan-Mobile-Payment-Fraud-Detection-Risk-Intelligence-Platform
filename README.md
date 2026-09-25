@@ -49,23 +49,19 @@ Executive Dashboard
 
 Built as a 3-page Databricks AI/BI Dashboard, backed by 4 semantic datasets (Transaction Behavioral Analytics, Enriched Transactions (Fraud & Risk), Merchant Risk Profiles, User Demographics & Credit) with dedicated dimensions and measures for each.
 
-1. Fraud & Risk Overview
-
+Fraud & Risk Overview
 1. KPI cards: Total Transactions, Fraud Detected, Fraud Rate, Total Volume (UZS)
 2. Bar chart: Fraud by Channel, Fraud by Region, Fraud by Merchant Category, Avg Z-Score by Channel, Avg Amount by Risk Tier
 3. Pie chart: Risk Tier Distribution
 4. Line chart: Transaction Volume Over Time 
 
-
-2. Merchant Risk Profiling
-
+Merchant Risk Profiling
 1. KPI cards: Total Merchants, Avg Risk Score, Avg Transaction (UZS)
 2. Bar Chart: Merchant Count by Category, Avg Risk Score by Region, Avg Risk Score by Category
 3. Pie Chart: Online vs Offline
 4. Table: Top Merchants by Risk Score 
 
-3. User & Behavioral Analytics
-
+User & Behavioral Analytics
 1. KPI cards: Total Users, Avg Credit Score, Identity Verified Rate, Avg Monthly Income (UZS)
 2. Bar Chart: Users by Region, Users by Age Group, Fraud by Hour of Day, Fraud by Day of Week, Fraud by Login Attempts, Fraud: Weekend vs Weekday
 3. Pie Chart: Identity Status Distribution 
@@ -108,3 +104,4 @@ Dashboard link: https://dbc-a6b481b0-6de2.cloud.databricks.com/dashboardsv3/01f1
 
 <img width="838" height="588" alt="Image" src="https://github.com/user-attachments/assets/df9a8796-cdcd-4260-bb7c-c99301104eb3" />
 
+<img width="839" height="551" alt="Image" src="https://github.com/user-attachments/assets/1b84c603-3573-4443-8bb0-74ab8f6ece30" />
